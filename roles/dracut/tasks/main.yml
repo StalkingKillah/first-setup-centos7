@@ -1,0 +1,4 @@
+---
+# file: tasks/main.yml
+# created-on: 2015-05-21
+- include: configuration.yml

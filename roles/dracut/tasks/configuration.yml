@@ -1,0 +1,14 @@
+---
+# file: tasks/configuration.yml
+# created-on: 2015-05-21
+- name: be sure dracut is configured to include dm_snapshot kernel module
+  lineinfile:
+    dest: /etc/dracut.conf
+    insertafter: '^#add_drivers+=""'
+    line: 'add_drivers+="dm_snapshot"'
+    backup: yes
+    state: present
+  register: dracut_add_driver
+- name: be sure new initramfs image is generated with new module
+  command: "/usr/sbin/dracut -f"
+  when: "'line added' in dracut_add_driver.msg"
