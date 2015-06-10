@@ -1,0 +1,22 @@
+---
+# file: tasks/redhat.yml
+# created-on: 2015-05-20
+- name: check current system locale
+  # shell: "locale 2>/dev/null | grep LC_CTYPE | awk 'BEGIN { FS = \"=\" } ; { print $2 }'"
+  shell: "localectl | grep 'System Locale' | awk '{ print $3 }'"
+  register: system_locale
+- name: be sure selected locale is generated
+  command : "localedef -v -c -i {{locale_lang}} -f {{locale_codeset}} {{locale_lang}}.{{locale_codeset}}"
+  when: "'{{locale_lang}}.{{locale_codeset}}' not in system_locale.stdout"
+- name: be sure system locale is set to selected locale
+  command: "localectl set-locale LANG={{locale_lang}}.{{locale_codeset}}"
+  when: "'{{locale_lang}}.{{locale_codeset}}' not in system_locale.stdout"
+- name: be sure shell environment locale is set to selected locale
+  template: 
+    src: redhat/set_locale.sh
+    dest: /etc/profile.d/force_locale.sh
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  # when: "'{{locale_lang}}.{{locale_codeset}}' not in system_locale.stdout"

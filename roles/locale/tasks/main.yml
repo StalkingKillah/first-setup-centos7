@@ -1,0 +1,7 @@
+---
+# file: tasks/main.yml
+# created-on: 2015-05-20
+- include: debian.yml
+  when: ansible_os_family == "Debian"
+- include: redhat.yml
+  when: ansible_os_family == "RedHat"
