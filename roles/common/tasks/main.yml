@@ -1,0 +1,11 @@
+---
+# file: task/main.yml
+# created-on: 2015-05-20
+- name: be sure all packages are updated to latest version
+  yum:
+    name: "*"
+    state: latest
+- name: be sure net-tools is installed
+  yum:
+    name: net-tools
+    state: present
