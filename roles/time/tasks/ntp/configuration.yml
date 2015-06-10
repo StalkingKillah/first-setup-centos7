@@ -1,0 +1,11 @@
+---
+# file: ntp/configuration.yml
+# created-on: 2015-05-26
+- name: be sure network time servers are set in ntp.conf
+  lineinfile:
+    dest: /etc/ntp.conf
+    insertafter: '^server [a-z0-9.-]+ [a-z]+'
+    regexp: '^server {{item}} iburst'
+    line: "server {{item}} iburst"
+    state: present
+  with_items: time_servers

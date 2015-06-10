@@ -1,0 +1,19 @@
+---
+# file: tasks/main.yml
+# created-on: 2015-05-25
+- name: check if chrony.conf exists
+  stat:
+    path: /etc/chrony.conf
+    follow: yes
+  register: chrony_conf
+  when: time_use_chrony
+- name: check if ntp.conf exists
+  stat:
+    path: ntp.conf
+    follow: yes
+  register: ntp_conf
+  when: time_use_ntp and not chrony_conf is defined
+- include: chrony/main.yml
+  when: time_use_chrony and chrony_conf is defined
+- include: ntp/main.yml
+  when: time_use_ntp and ntp_conf is defined

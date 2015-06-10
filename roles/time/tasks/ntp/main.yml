@@ -1,0 +1,5 @@
+---
+# file: ntp/main.yml
+# created-on: 2015-05-26
+- include: setup.yml
+- include: configuration.yml
