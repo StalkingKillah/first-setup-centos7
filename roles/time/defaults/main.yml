@@ -1,0 +1,10 @@
+---
+# file: defaults/main.yml
+# created-on: 2015-05-25
+time_use_chrony: 
+time_use_ntp: 
+time_servers:
+  - 0.ch.pool.ntp.org
+  - 1.ch.pool.ntp.org
+  - 2.ch.pool.ntp.org
+  - 3.ch.pool.ntp.org

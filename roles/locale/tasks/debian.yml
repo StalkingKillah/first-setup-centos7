@@ -1,0 +1,16 @@
+---
+# file: tasks/debian.yml
+# created-on: 2015-05-20
+- name: be sure locale-gen is run for the selected locale
+  command: "/usr/sbin/locale-gen {{ locale_lang }}"
+- name: be sure selected locale is present
+  locale_gen: "name={{ locale_lang }}.{{ locale_codeset }} state=present"
+- name: be sure locale package is reconfigured
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive locales
+- name: be sure LC_CTYPE is set to selected locale
+  lineinfile:
+    dest: /etc/environment
+    regexp: '^LC_CTYPE='
+    line: 'LC_CTYPE={{ locale_lang }}.{{ locale_codeset }}'
+    backup: yes
+    state: present

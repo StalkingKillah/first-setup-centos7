@@ -1,0 +1,4 @@
+---
+# file: defaults/main.yml
+# created-on: 2015-05-25
+cockpit_use_webif: yes

@@ -1,0 +1,8 @@
+---
+# file: ntp/setup.yml
+# created-on: 2015-05-26
+- name: be sure ntp is installed
+  yum:
+    name: ntp
+    state: present
+  when: not ntp_conf.stat.exists

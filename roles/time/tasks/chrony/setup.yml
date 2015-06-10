@@ -1,0 +1,8 @@
+---
+# file: chrony/setup.yml
+# created-on: 2015-05-26
+- name: be sure chrony is installed
+  yum:
+    name: chrony
+    state: present
+  when: not chrony_conf.stat.exists

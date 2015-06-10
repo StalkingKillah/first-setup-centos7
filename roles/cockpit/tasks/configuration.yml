@@ -1,0 +1,43 @@
+---
+# file: tasks/configuration.yml
+# created-on: 2015-05-20
+- name: be sure cockpit has user supplied ssl certificate
+  copy:
+    src: "{{cockpit_ssl_cert_file}}"
+    dest: "/etc/cockpit/ws-certs.d/{{ansible_fqdn}}.cert"
+    owner: root
+    group: root
+    mode: 0600
+    backup: yes
+  when: cockpit_ssl_cert_file is defined
+  tags:
+    - cockpit-ssl
+- name: be sure cockpit.socket is enabled and started
+  service:
+    name: cockpit.socket
+    enabled: yes
+    state: started
+  tags:
+    - cockpit-service
+- name: be sure cockpit is enabled and started
+  service:
+    name: cockpit
+    enabled: yes
+    state: started
+  when: cockpit_use_webif
+  tags:
+    - cockpit-service
+- name: check if cockpit service exists in firewall
+  command: /usr/bin/firewall-cmd -q --query-service=cockpit
+  changed_when: false
+  ignore_errors: yes
+  register: cockpit_fw
+  tags:
+    - cockpit-service
+    - cockpit-firewall
+- name: be sure cockpit service is added to firewall
+  command: /usr/bin/firewall-cmd --permanent --add-service=cockpit
+  when: "cockpit_fw.rc != 0"
+  tags:
+    - cockpit-service
+    - cockpit-firewall
